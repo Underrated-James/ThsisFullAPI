@@ -1,0 +1,80 @@
+/* Ensure the background image covers the entire page */
+.settings-page {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+    z-index: 10;
+  }
+  .settings-page::before {
+    content: none; /* Ensure no overlay exists */
+  }
+  
+  /* Center the settings container */
+  .settings-container {
+    background: rgba(0, 0, 0, 0.8);
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    max-width: 600px;
+    width: 90%;
+    color: white;
+    text-align: center;
+  }
+  
+  .settings-title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .settings-label {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    text-align: left;
+  }
+  
+  .settings-select,
+  .settings-slider,
+  .settings-checkbox {
+    margin-top: 0.5rem;
+  }
+  
+  /* Ensure responsiveness */
+  @media (max-width: 768px) {
+    .settings-container {
+      padding: 1rem;
+    }
+  
+    .settings-title {
+      font-size: 1.5rem;
+    }
+  }
+  .voice-controller {
+    position: fixed; /* Stays in the same place when scrolling */
+    bottom: 20px; /* Distance from the bottom */
+    right: 20px; /* Distance from the right */
+    z-index: 9999; /* Ensures it appears above other elements */
+  }
+  
+  .mic-button {
+    border: none;
+    background: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
+    border-radius: 50%;
+    padding: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease;
+  }
+  
+  .mic-button:hover {
+    transform: scale(1.1); /* Slight zoom on hover */
+  }
+  

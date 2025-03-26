@@ -1,61 +1,61 @@
 import { Mic, MicOff } from "lucide-react";
+import { useEffect, useState } from "react";
 import useSpeechRecognition from "../Hooks/userSpeechRecognitionHook";
-import { useState } from "react";
+import { useColorBlind } from "../DaltonizationFilter/ColorBlindContext";
 
 const VoiceController = () => {
-    const { text, startListening, stopListening, isListening, hasRecognitionSupport } = useSpeechRecognition();
-    const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { setFilterMode } = useColorBlind();
+  const {
+    text,
+    startListening,
+    stopListening,
+    isListening,
+    hasRecognitionSupport,
+  } = useSpeechRecognition();
 
-    // Function to toggle sidebar based on voice commands
-    const handleCommand = (command: string) => {
-        if (command.includes("open sidebar")) {
-            setSidebarOpen(true);
-            console.log("Sidebar opened");
-        } else if (command.includes("close sidebar")) {
-            setSidebarOpen(false);
-            console.log("Sidebar closed");
-        } else if (command.includes("play flappy bird")) {
-            console.log("Launching Flappy Bird");
-        } else if (command.includes("play scream hero")) {
-            console.log("Launching Scream Hero");
-        } else if (command.includes("play 2048")) {
-            console.log("Launching 2048");
-        }
-    };
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-    if (!hasRecognitionSupport) {
-        return <h1>Your browser has no speech recognition support</h1>;
+  const handleCommand = (command: string) => {
+    const lower = command.toLowerCase();
+
+    if (lower.includes("open sidebar")) {
+      setSidebarOpen(true);
+      console.log("🟢 Sidebar opened");
+    } else if (lower.includes("close sidebar")) {
+      setSidebarOpen(false);
+      console.log("🔴 Sidebar closed");
+    } else if (lower.includes("enable protanopia")) {
+      setFilterMode("protanopia");
+      console.log("🎨 Protanopia filter enabled.");
+    } else if (lower.includes("enable tritanopia")) {
+      setFilterMode("tritanopia");
+      console.log("🎨 Tritanopia filter enabled.");
+    } else if (lower.includes("disable color filter")) {
+      setFilterMode("none");
+      console.log("🎨 Color filter disabled.");
     }
+  };
 
-    return (
-        <div style={{ textAlign: "center", marginTop: "2rem" }}>
-            <button
-                onMouseDown={startListening}
-                onMouseUp={() => {
-                    stopListening();
-                    handleCommand(text.toLowerCase());
-                }}
-                onTouchStart={startListening}
-                onTouchEnd={() => {
-                    stopListening();
-                    handleCommand(text.toLowerCase());
-                }}
-                style={{
-                    border: "none",
-                    background: "transparent",
-                    cursor: "pointer",
-                    outline: "none",
-                }}
-            >
-                {isListening ? <MicOff size={48} color="red" /> : <Mic size={48} color="green" />}
-            </button>
+  useEffect(() => {
+    if (!isListening && text.trim()) {
+      handleCommand(text);
+    }
+  }, [isListening]);
 
-            <div style={{ marginTop: "1rem" }}>
-                {isListening && <p>🎙️ Your browser is currently listening...</p>}
-                <p><strong>Recognized Text:</strong> {text}</p>
-            </div>
-        </div>
-    );
+  if (!hasRecognitionSupport) {
+    return <h1>⚠️ Your browser does not support speech recognition.</h1>;
+  }
+
+  return (
+    <div className="voice-controller">
+      <button
+        className="mic-button"
+        onClick={isListening ? stopListening : startListening}
+      >
+        {isListening ? <MicOff color="red" /> : <Mic color="green" />}
+      </button>
+    </div>
+  );
 };
 
 export default VoiceController;

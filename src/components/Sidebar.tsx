@@ -31,10 +31,10 @@ const Sidebar = () => {
 
   return (
     <div>
-      {/* Sidebar Toggle Button */}
+      {/* Sidebar Toggle Button 
       <button onClick={() => setIsOpen((prev) => !prev)}>
         {isOpen ? "Close Sidebar" : "Open Sidebar"}
-      </button>
+      </button>*/}
 
       {/* Sidebar */}
       <div className={`sidebar ${isOpen ? "open" : "closed"}`}>

@@ -1,41 +1,69 @@
-/* Header */
-.logo{
-    padding-left: 200px;
-}
+/* Import Luckiest Guy font */
+@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap');
 
-.nav-menu{
-    padding-right: 300px;
+/* Header */
+.logo {
+    font-family: 'Luckiest Guy', cursive;  /* Apply Luckiest Guy font */
+    font-size: 28px;  /* Adjust size */
+    color: #F1916D;  /* Adjust color to match theme */
+    padding-left: 100px;
+}
+.nav-item {
+    color: black;
+    text-decoration: none;
+    font-size: 22px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+  
+  .nav-item:hover,
+.nav-item:focus,
+.nav-item.active {
+  color: white;
+  background-color: transparent; /* Remove default solid background */
+  font-size: 26px;
+  padding: 7px 20px; /* Increase padding */
+  border-radius: 20px;
+  text-shadow:
+    -4px -4px 0 #f20c0c,
+     4px -5px 0 #f20c0c,
+    -4px  5px 0 #f20c0c,
+     4px  5px 0 #f20c0c,
+     0px  7px 0 #f20c0c; /* Extra for bubble depth */
+}
+.nav-menu {
+    padding-right: 450px;
 }
 
 .header {
+    color: black;
+    font-size: 25px;
+  font-family: 'Luckiest Guy', cursive;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 60px;
-    background: rgba(20, 20, 20, 0.95);
-    color: white;
+    height: 80px;
+    background: rgba(248, 248, 248, 0.95);
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 20px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
     z-index: 15;
-  }
-  
-  .header nav {
+}
+
+.header nav {
     display: flex;
-    gap: 20px;
-  }
-  
-  .header p {
+    gap: 150px;
+}
+
+.header p {
     cursor: pointer;
     transition: color 0.3s;
-  }
-  
-  .header p:hover {
-    color: #f39c12;
-  }
-  
+}
 
-  
+.header p:hover {
+    color: #f39c12;
+}
