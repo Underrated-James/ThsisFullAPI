@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import "../CssFiles/Games.css";
 import backgroundImage from "../Images/games-bg.png";
@@ -9,12 +10,13 @@ import imgScream from "../Images/tetris.jpg";
 import video2048 from "../videos/2048video.mp4";
 import videoFlappy from "../videos/flappybird video.mp4";
 import videoTetris from "../videos/tetrix-video.mp4";
+import { useFontSize } from "./FontSizeContext";
 
 // Game Data
 const games = [
-  { name: "2048", img: img2048, video: video2048 },
-  { name: "Flappy Bird", img: imgFlappy, video: videoFlappy },
-  { name: "Tetris", img: imgScream, video: videoTetris },
+  { name: "2048", img: img2048, video: video2048, route: "/2048" },
+  { name: "Flappy Bird", img: imgFlappy, video: videoFlappy, route: "/flappybird" },
+  { name: "Tetris", img: imgScream, video: videoTetris, route: "/tetris" },
 ];
 
 // Game Descriptions
@@ -29,15 +31,32 @@ const gameDescriptions: Record<string, string> = {
 
 function Games() {
   const [selected, setSelected] = useState<string>(games[1]?.name || "Flappy Bird");
+  const navigate = useNavigate();
+  const fontSize = useFontSize(); 
 
+  // Get current game index
   const selectedIndex = games.findIndex((g) => g.name === selected);
-  
-  // Ensure selectedIndex is valid
+
+  // Ensure valid indices for cycling games
   const previousIndex = (selectedIndex - 1 + games.length) % games.length;
   const nextIndex = (selectedIndex + 1) % games.length;
 
-  // Filter out undefined values
-  const reorderedGames = [games[nextIndex], games[selectedIndex], games[previousIndex]].filter(Boolean);
+  // Safely access games, fallback to a default object if undefined
+  const reorderedGames = [
+    games[nextIndex] ?? games[0],
+    games[selectedIndex] ?? games[1],
+    games[previousIndex] ?? games[2],
+  ];
+
+  // Navigate to the selected game
+  const handlePlay = () => {
+    const selectedGame = games.find((game) => game.name === selected);
+    if (selectedGame) {
+      navigate(selectedGame.route);
+    } else {
+      console.error("Selected game not found!");
+    }
+  };
 
   return (
     <div
@@ -49,7 +68,7 @@ function Games() {
     >
       <div className="games-cards">
         {reorderedGames.map((game) =>
-          game ? ( // Ensure game is defined
+          game ? (
             <motion.div
               key={game.name}
               className={`card ${selected === game.name ? "active" : "darkened"}`}
@@ -63,7 +82,7 @@ function Games() {
               transition={{ type: "spring", stiffness: 300, damping: 25 }}
               whileHover={selected !== game.name ? { scale: 1.05 } : {}}
             >
-              {game.video ? (
+              {game.video && (
                 <div className="video-wrapper">
                   <video
                     className="card-video"
@@ -76,8 +95,6 @@ function Games() {
                   />
                   <img src={game.img} alt={game.name} className="card-image" />
                 </div>
-              ) : (
-                <img src={game.img} alt={game.name} />
               )}
             </motion.div>
           ) : null
@@ -92,13 +109,14 @@ function Games() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.3 }}
+          style={{fontSize: `${fontSize}px`}}
         >
           <h2>{selected.toUpperCase()}</h2>
           <p>{gameDescriptions[selected] ?? "No description available."}</p>
         </motion.div>
       </AnimatePresence>
 
-      <div className="games-play-button">
+      <div className="games-play-button" onClick={handlePlay}>
         <img src={playButtonImage} alt="Play" className="play-button-img" />
       </div>
     </div>

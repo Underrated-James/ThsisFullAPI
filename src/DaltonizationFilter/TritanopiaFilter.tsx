@@ -1,91 +1,91 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useColorBlind } from "../DaltonizationFilter/ColorBlindContext";
+
+const FILTER_CONTAINER_ID = "tritanopia-filter";
+const FILTER_ID = "tritanopia-enhanced";
 
 const TritanopiaFilter = () => {
-  const [enabled, setEnabled] = useState(
-    localStorage.getItem("tritanopiaFilter") === "true"
-  );
-  const [intensity, setIntensity] = useState(
-    parseFloat(localStorage.getItem("tritanopiaIntensity") ?? "1.0")
-  );
+  const { filter, intensity } = useColorBlind();
+  const enabled = filter === "tritanopia";
 
   useEffect(() => {
-    const id = "tritanopia-filter";
-    const html = document.documentElement;
-    let filterContainer = document.getElementById(id);
+    console.log("🔍 TritanopiaFilter useEffect triggered. Enabled:", enabled, "Intensity:", intensity);
+
+    let container = document.getElementById(FILTER_CONTAINER_ID);
 
     if (enabled) {
-      if (!filterContainer) {
-        filterContainer = document.createElement("div");
-        filterContainer.id = id;
-        filterContainer.style.height = "0";
-        filterContainer.style.lineHeight = "0";
-        filterContainer.style.margin = "0";
-        filterContainer.style.padding = "0";
-        document.body.appendChild(filterContainer);
+      if (!container) {
+        console.log("⚠️ Creating new Tritanopia filter container...");
+        container = document.createElement("div");
+        container.id = FILTER_CONTAINER_ID;
+        document.body.appendChild(container);
+      } else {
+        container.innerHTML = ""; // Clear previous filter content for live updates
       }
 
-      filterContainer.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-          <defs>
-            <filter id="tritanopia-advanced" color-interpolation-filters="linearRGB">
-              <feColorMatrix type="matrix" values="
-                1.0  0.0   0.0   0.0  0.0
-                0.0  1.0   0.0   0.0  0.0
-               ${Math.max(-0.3, -0.2 * intensity)} ${Math.min(1.5, 1.3 * intensity)}  1.0   0.0  0.0
-                0.0  0.0   0.0   1.0  0.0
-              " in="SourceGraphic"/>
-              <feComponentTransfer>
-                <feFuncR type="gamma" exponent="${Math.max(0.7, Math.min(1.0, 0.8 * intensity))}"/>
-                <feFuncG type="gamma" exponent="${Math.max(0.85, Math.min(1.1, 0.9 * intensity))}"/>
-                <feFuncB type="gamma" exponent="${Math.max(1.2, Math.min(1.5, 1.3 * intensity))}"/>
-              </feComponentTransfer>
-            </filter>
-          </defs>
-        </svg>
-      `;
-      
-      html.style.transition = "filter 0.5s ease-in-out";
-      html.style.filter = "url(#tritanopia-advanced)";
-      localStorage.setItem("tritanopiaFilter", "true");
+      const svgNS = "http://www.w3.org/2000/svg";
+      const svg = document.createElementNS(svgNS, "svg");
+      svg.setAttribute("style", "display: none");
+
+      const defs = document.createElementNS(svgNS, "defs");
+      const filterEl = document.createElementNS(svgNS, "filter");
+      filterEl.setAttribute("id", FILTER_ID);
+      filterEl.setAttribute("color-interpolation-filters", "linearRGB");
+
+      const feColorMatrix = document.createElementNS(svgNS, "feColorMatrix");
+      feColorMatrix.setAttribute("type", "matrix");
+
+      feColorMatrix.setAttribute(
+        "values",
+        `
+          ${Math.max(0.95, 0.967 * intensity)} ${Math.max(0.05, 0.033 * intensity)} 0.0 0.0 0.0
+          0.0 ${Math.max(0.433, 0.5 * intensity)} ${Math.max(0.567, 0.5 * intensity)} 0.0 0.0
+          0.0 ${Math.max(0.475, 0.475 * intensity)} ${Math.max(0.525, 0.525 * intensity)} 0.0 0.0
+          0.0 0.0 0.0 1.0 0.0
+        `
+      );
+
+      const feComponentTransfer = document.createElementNS(svgNS, "feComponentTransfer");
+
+      const feFuncR = document.createElementNS(svgNS, "feFuncR");
+      feFuncR.setAttribute("type", "gamma");
+      feFuncR.setAttribute("exponent", `${Math.max(0.9, Math.min(1.2, 1.05 * intensity))}`);
+
+      const feFuncG = document.createElementNS(svgNS, "feFuncG");
+      feFuncG.setAttribute("type", "gamma");
+      feFuncG.setAttribute("exponent", `${Math.max(0.9, Math.min(1.2, 1.1 * intensity))}`);
+
+      const feFuncB = document.createElementNS(svgNS, "feFuncB");
+      feFuncB.setAttribute("type", "gamma");
+      feFuncB.setAttribute("exponent", `${Math.max(1.0, Math.min(1.3, 1.2 * intensity))}`);
+
+      feComponentTransfer.appendChild(feFuncR);
+      feComponentTransfer.appendChild(feFuncG);
+      feComponentTransfer.appendChild(feFuncB);
+
+      filterEl.appendChild(feColorMatrix);
+      filterEl.appendChild(feComponentTransfer);
+      defs.appendChild(filterEl);
+      svg.appendChild(defs);
+      container.appendChild(svg);
+
+      document.documentElement.style.filter = `url(#${FILTER_ID})`;
+      console.log("🎨 Tritanopia filter applied with updated intensity.");
     } else {
-      filterContainer?.remove();
-      html.style.transition = "filter 0.5s ease-in-out";
-      html.style.filter = "none";
-      localStorage.setItem("tritanopiaFilter", "false");
+      if (container) {
+        container.remove();
+        console.log("🧽 Removed Tritanopia filter container.");
+      }
+      document.documentElement.style.filter = "none";
+      console.log("❌ Tritanopia filter disabled.");
     }
+
+    return () => {
+      console.log("🧼 Cleanup on unmount or change.");
+    };
   }, [enabled, intensity]);
 
-  return (
-    <div className="fixed top-4 right-4 z-50 flex flex-col items-end gap-2 p-4 bg-white rounded shadow-lg">
-      <label className="text-sm font-semibold">Tritanopia Intensity</label>
-      <input
-        type="range"
-        min="0.5"
-        max="2.5"
-        step="0.1"
-        value={intensity}
-        onChange={(e) => {
-          const newValue = parseFloat(e.target.value);
-          setIntensity(newValue);
-          localStorage.setItem("tritanopiaIntensity", newValue.toString());
-        }}
-        className="w-full cursor-pointer"
-      />
-      <button
-        onClick={() => {
-          setEnabled((prev) => {
-            const newState = !prev;
-            return newState;
-          });
-        }}
-        className={`mt-2 px-4 py-2 rounded text-white ${
-          enabled ? "bg-yellow-600 hover:bg-yellow-700" : "bg-blue-700 hover:bg-blue-800"
-        }`}
-      >
-        {enabled ? "Disable Tritanopia" : "Enable Tritanopia"}
-      </button>
-    </div>
-  );
+  return null;
 };
 
 export default TritanopiaFilter;

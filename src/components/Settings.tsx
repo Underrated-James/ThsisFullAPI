@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useColorBlind } from "../DaltonizationFilter/ColorBlindContext";
 import "../CssFiles/Settings.css";
 import backgroundImage from "../Images/Settingsbackground.jpg";
+import { useFontSize } from "./FontSizeContext";
 
 const settingsKeys = [
   "daltonization",
@@ -14,6 +15,7 @@ const settingsKeys = [
 
 function Settings() {
   const { filter, setFilterMode, intensity, setIntensity } = useColorBlind();
+  const { fontSize, setFontSize } = useFontSize();
 
   const [settings, setSettings] = useState(() => {
     const initialSettings = settingsKeys.reduce((acc, key) => {
@@ -32,22 +34,34 @@ function Settings() {
 
   const prevFilterRef = useRef(filter);
 
+  // Sync context fontSize with local state
   useEffect(() => {
-    if (filter && settings.daltonization !== filter && prevFilterRef.current !== filter) {
+    if (settings.textSize !== fontSize) {
+      setFontSize(settings.textSize);
+    }
+  }, [settings.textSize]);
+
+  useEffect(() => {
+    // Apply font size dynamically in real-time
+    document.documentElement.style.fontSize = `${fontSize}px`;
+    document.documentElement.style.setProperty("--dynamic-font-size", `${fontSize}px`);
+  }, [fontSize]);
+
+  useEffect(() => {
+    settingsKeys.forEach((key) => {
+      const value = settings[key]?.toString();
+      localStorage.setItem(key, value);
+    });
+
+    document.body.classList.toggle("high-contrast", settings.highContrast);
+  }, [settings]);
+
+  useEffect(() => {
+    if (filter !== prevFilterRef.current && filter !== settings.daltonization) {
       prevFilterRef.current = filter;
       setSettings((prev) => ({ ...prev, daltonization: filter }));
     }
   }, [filter]);
-
-  useEffect(() => {
-    settingsKeys.forEach((key) => {
-      const newValue = settings[key]?.toString();
-      localStorage.setItem(key, newValue);
-    });
-
-    document.documentElement.style.fontSize = `${settings.textSize}px`;
-    document.body.classList.toggle("high-contrast", settings.highContrast);
-  }, [settings]);
 
   useEffect(() => {
     if (settings.daltonization !== filter) {
@@ -56,16 +70,54 @@ function Settings() {
     }
   }, [settings.daltonization]);
 
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "daltonization") {
+        const newValue = e.newValue || "none";
+        setSettings((prev) => ({ ...prev, daltonization: newValue }));
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
+
+  useEffect(() => {
+    const handleColorFilterChange = (e: CustomEvent) => {
+      const newMode = e.detail;
+      setSettings((prev) => ({ ...prev, daltonization: newMode }));
+      setFilterMode(newMode);
+    };
+
+    window.addEventListener("colorFilterChange", handleColorFilterChange as EventListener);
+    return () => window.removeEventListener("colorFilterChange", handleColorFilterChange as EventListener);
+  }, []);
+
   const handleChange = (key: string, value: any) => {
     if (settings[key] !== value) {
       setSettings((prev) => ({ ...prev, [key]: value }));
 
+      if (key === "textSize") {
+        setFontSize(value); // Realtime update
+      }
+
       if (key === "daltonization" && value !== filter) {
         setFilterMode(value);
-        window.dispatchEvent(new StorageEvent("storage", { key: "daltonization", newValue: value }));
+        window.dispatchEvent(
+          new StorageEvent("storage", { key: "daltonization", newValue: value })
+        );
       }
     }
   };
+  useEffect(() => {
+    if (settings.daltonization !== "none") {
+      const timeout = setTimeout(() => {
+        setFilterMode(settings.daltonization);
+      }, 100); // or any delay you like
+      return () => clearTimeout(timeout);
+    }
+  }, [intensity]);
+  
 
   return (
     <div
@@ -86,7 +138,7 @@ function Settings() {
             value={settings.daltonization}
             onChange={(e) => handleChange("daltonization", e.target.value.toLowerCase())}
           >
-            {["None", "Protanopia", "Tritanopia"].map((mode) => (
+            {["None", "Protanopia", "Deuteranopia", "Tritanopia"].map((mode) => (
               <option key={mode} value={mode.toLowerCase()}>
                 {mode}
               </option>
@@ -113,15 +165,18 @@ function Settings() {
 
         <label className="settings-label">
           <span>
-            Text Size: <span>{settings.textSize}px</span>
+            Text Size: <span>{fontSize}px</span>
           </span>
           <input
             className="settings-slider"
             type="range"
-            min="12"
-            max="24"
-            value={settings.textSize}
-            onChange={(e) => handleChange("textSize", Number(e.target.value))}
+            min="11"
+            max="18"
+            value={fontSize}
+            onChange={(e) => {
+              const newSize = Number(e.target.value);
+              handleChange("textSize", newSize);
+            }}
           />
         </label>
 

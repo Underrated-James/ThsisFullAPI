@@ -1,0 +1,107 @@
+:root {
+  --piece-i-color: #00ffff;
+  --piece-o-color: #d4ff00;
+  --piece-t-color: #bb00ff;
+  --piece-s-color: #00ff22;
+  --piece-z-color: #0004ff;
+  --piece-j-color: #ff0000;
+  --piece-l-color: #ffa200;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Press Start 2P", system-ui;
+  background-color: #111;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.game-container {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 80px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+/* Game board canvas */
+#game-board {
+  width: 300px;
+  height: 600px;
+  border: 2px solid #222;
+  background-color: black;
+}
+
+/* Side Panel */
+.side-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 160px;
+}
+
+/* Hold & Next containers */
+.preview-container,
+.hold-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.preview-container h3,
+.hold-preview h3 {
+  margin: 0 0 5px 0;
+  font-size: 14px;
+  color: #fff;
+}
+
+/* Canvas styling for hold/next */
+canvas {
+  width: 140px;
+  height: 140px;
+  border: 2px solid #333;
+  background-color: #111;
+}
+
+.score{
+  display: flex;
+  flex-direction: column;
+  margin-top: -80px;
+  padding-right: 650px;
+  align-items: center;
+  font-size: 14px;
+  color: #00ffff;
+}
+
+/* Score, Level, Lines */
+.level, .lines {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+/* Start Button */
+#start-button {
+  background-color: #00ff00;
+  color: #000;
+  border: none;
+  padding: 10px 0;
+  font-family: "Press Start 2P", system-ui;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: transform 0.2s ease;
+}
+
+#start-button:hover {
+  transform: scale(1.05);
+}

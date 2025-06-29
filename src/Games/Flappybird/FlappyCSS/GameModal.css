@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+.game-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(180deg, #ffeb3b, #f9a825);
+  padding: 25px;
+  border-radius: 15px;
+  text-align: center;
+  width: 320px;
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+  transition: opacity 0.3s ease-in-out, transform 0.2s ease-in-out;
+  z-index: 500;
+  border: 4px solid #f57f17;
+}
+
+.game-modal h2 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  font-family: 'Press Start 2P', cursive;
+  color: #212121;
+  text-shadow: 2px 2px 0px #f57f17;
+}
+
+.select-box,
+.toggle-group {
+  margin: 12px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toggle-group label,
+.select-box label {
+  font-size: 12px;
+  font-weight: bold;
+  color: #212121;
+  font-family: 'Press Start 2P', cursive;
+}
+
+.toggle-group button,
+.select-box select {
+  background: #ff5722;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'Press Start 2P', cursive;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 2px 3px 0px #d84315;
+  outline: none;
+}
+
+.toggle-group button:hover {
+  background: #e64a19;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 3px 5px 0px #bf360c;
+}
+
+.select-box select {
+  background: #03a9f4;
+  box-shadow: 2px 3px 0px #0277bd;
+}
+
+.select-box select:hover {
+  background: #0288d1;
+}

@@ -1,16 +1,19 @@
 import "../CssFiles/Body.css";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import useSpeechRecognition from "../Hooks/userSpeechRecognitionHook";
+import img2048 from "../Images/2048-games.png";
+import imgFlappy from "../Images/FlappyBird.png";
+import imgScream from "../Images/tetris.jpg";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { text } = useSpeechRecognition();
+  const navigate = useNavigate(); // ⬅️ React Router navigation
 
   useEffect(() => {
     const lowerText = text.toLowerCase();
-    console.log("Recognized command:", lowerText); // Debugging log
 
-    // Toggle sidebar
     if (lowerText.includes("open sidebar")) {
       setIsOpen(true);
       console.log("Sidebar opened");
@@ -19,35 +22,26 @@ const Sidebar = () => {
       console.log("Sidebar closed");
     }
 
-    // Select a game
     if (lowerText.includes("play flappy bird")) {
-      console.log("Launching Flappy Bird...");
+      navigate("/flappy-bird");
     } else if (lowerText.includes("play scream hero")) {
-      console.log("Launching Scream Hero...");
-    } else if (lowerText.includes("play 2048")) {
-      console.log("Launching 2048...");
+      // navigate("/scream-hero");
+    } else if (lowerText.includes("/2048")) {
+      // navigate("/2048");
     }
-  }, [text]);
+  }, [text, navigate]);
 
   return (
-    <div>
-      {/* Sidebar Toggle Button 
-      <button onClick={() => setIsOpen((prev) => !prev)}>
-        {isOpen ? "Close Sidebar" : "Open Sidebar"}
-      </button>*/}
-
-      {/* Sidebar */}
-      <div className={`sidebar ${isOpen ? "open" : "closed"}`}>
-        <h3>Games</h3>
-        <div className="game-card">
-          <img src="flappyBird.png" alt="Flappy Bird" width="100%" />
-        </div>
-        <div className="game-card">
-          <img src="scream.png" alt="Scream Hero" width="100%" />
-        </div>
-        <div className="game-card">
-          <img src="2048.png" alt="2048" width="100%" />
-        </div>
+    <div className={`sidebar ${isOpen ? "open" : "closed"}`}>
+      <h3>Games</h3>
+      <div className="game-card" onClick={() => navigate("/flappybird")}>
+        <img src={imgFlappy} alt="Flappy Bird" width="100%" />
+      </div>
+      <div className="game-card" onClick={() => navigate("/2048")}>
+        <img src={img2048} alt="2048" width="100%" />
+      </div>
+      <div className="game-card" onClick={() => navigate("/tetris")}>
+        <img src={imgScream} alt="Scream Hero" width="100%" />
       </div>
     </div>
   );

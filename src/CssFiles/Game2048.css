@@ -1,0 +1,31 @@
+.game-container {
+    width: 300px;
+    display: grid;
+    gap: 5px;
+    background: #bbada0;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  .grid-row {
+    display: flex;
+  }
+  
+  .tile {
+    width: 60px;
+    height: 60px;
+    background: #cdc1b4;
+    color: #776e65;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    border-radius: 3px;
+  }
+  
+  .tile-2 { background: #eee4da; }
+  .tile-4 { background: #ede0c8; }
+  .tile-8 { background: #f2b179; color: white; }
+  .tile-16 { background: #f59563; color: white; }
+  

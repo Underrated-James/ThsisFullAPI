@@ -1,21 +1,20 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "composite": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
 
     /* Target & Module Settings */
     "target": "ES2020",
     "module": "ESNext",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "moduleResolution": "node",        // changed from 'bundler' for better compatibility
-    "allowImportingTsExtensions": true,
+    "moduleResolution": "node",
     "useDefineForClassFields": true,
     "isolatedModules": true,
-    "noEmit": true,
     "jsx": "react-jsx",
 
     /* Type Support */
-    "types": ["three", "three-stdlib"],
+    "types": ["react", "three", "three-stdlib"],
 
     /* Linting & Safety */
     "strict": true,

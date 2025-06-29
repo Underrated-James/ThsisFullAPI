@@ -13,6 +13,14 @@ export const ColorBlindProvider = ({ children }: { children: React.ReactNode }) 
   const [filter, setFilter] = useState<string>(() => localStorage.getItem("daltonization") || "none");
   const [intensity, setIntensity] = useState<number>(() => parseFloat(localStorage.getItem("filterIntensity") || "1.0"));
 
+  const setFilterMode = (mode: string) => {
+    if (mode !== filter) {
+      console.log(`🎨 Changing filter mode to: ${mode}`);
+      setFilter(mode);
+      localStorage.setItem("daltonization", mode); // sync localStorage immediately
+    }
+  };
+
   useEffect(() => {
     const storedFilter = localStorage.getItem("daltonization") || "none";
     const storedIntensity = localStorage.getItem("filterIntensity") || "1.0";
@@ -24,7 +32,7 @@ export const ColorBlindProvider = ({ children }: { children: React.ReactNode }) 
       localStorage.setItem("filterIntensity", intensity.toString());
     }
 
-    // Ensure previous filters are cleared first
+    // Clear existing filters
     document.documentElement.classList.remove("protanopia", "tritanopia");
 
     if (filter === "none") {
@@ -38,13 +46,33 @@ export const ColorBlindProvider = ({ children }: { children: React.ReactNode }) 
     }
   }, [filter, intensity]);
 
-  // ✅ Fix: Prevent `setFilterMode` from triggering re-renders when unnecessary
-  const setFilterMode = (mode: string) => {
-    if (mode !== filter) {
-      console.log(`🎨 Changing filter mode to: ${mode}`);
-      setFilter(mode);
-    }
-  };
+  // 🧠 NEW: Listen to localStorage and custom events
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "daltonization") {
+        const newValue = e.newValue || "none";
+        if (newValue !== filter) {
+          setFilter(newValue);
+        }
+      }
+    };
+
+    const handleCustomEvent = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      const newMode = customEvent.detail;
+      if (newMode && typeof newMode === "string") {
+        setFilterMode(newMode); // will update state and localStorage
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("colorFilterChange", handleCustomEvent);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("colorFilterChange", handleCustomEvent);
+    };
+  }, [filter]);
 
   return (
     <ColorBlindContext.Provider value={{ filter, setFilterMode, intensity, setIntensity }}>

@@ -1,0 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+.about-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Press Start 2P', cursive;
+}
+
+.about-modal {
+  margin-bottom: -60px;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  height: 500px;
+  width: 90%;
+  text-align: center;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modal-title {
+  font-size: var(--dynamic-font-size);
+  color: #fff;
+}
+
+/* Nav Style */
+.about-nav {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 1rem;
+  gap: 1.5rem;
+}
+
+.about-nav li {
+  color: rgb(255, 255, 255);
+  font-size: var(--dynamic-font-size);
+  padding: 5px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.about-nav li:hover,
+.about-nav li:focus {
+  color: #00ffcc;
+  background-color: transparent;
+  font-size: var(--dynamic-font-size);
+  padding: 3px 12px;
+  border-radius: 20px;
+}
+
+.about-nav li.active {
+  color: #00ffcc;
+  background-color: transparent;
+  font-size: var(--dynamic-font-size);
+  padding: 3px 12px;
+  border-radius: 20px;
+}
+
+
+/* Content section */
+.content-section {
+  text-align: center;
+  flex: 1;
+  overflow: hidden;
+  padding-top: 1rem;
+}
+
+.content-section img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  margin-top: 1rem;
+}
+
+/* Daltonization Steps */
+.daltonization-steps-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.step-box {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1.2rem;
+  flex: 1;
+  min-width: 0;
+  max-width: 32%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.step-box h2 {
+  font-size: var(--dynamic-font-size);
+  color: #9effd6;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.step-box p {
+  font-size: var(--dynamic-font-size);
+  margin-bottom: 0.7rem;
+  color: #e0e0e0;
+  text-align: center;
+}
+
+.step-box img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  object-fit: contain;
+}
+
+/* Voice command list */
+.voice-list {
+  font-size: var(--dynamic-font-size);
+  color: #00ffcc;
+  text-align: left;
+  margin-top: 1rem;
+  padding-left: 1rem;
+}
+.mic{
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}

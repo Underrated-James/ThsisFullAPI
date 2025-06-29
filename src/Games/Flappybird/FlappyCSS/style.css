@@ -1,0 +1,215 @@
+/* Game.css */
+
+.home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; 
+  width: 100vw; 
+  
+}
+
+
+.background {
+  background-image: url("../images/background-day.png");
+  background-repeat: repeat-x;
+  background-size: auto 100%; /* keep height fixed, repeat width */
+  width: 500px; /* or dynamically set in React */
+  height: 600px;
+  position: relative;
+  position: absolute;
+  bottom: 6.5%;
+  overflow: hidden;
+  border: 2px solid black;
+  animation: moveBackground 3s linear infinite;
+}
+
+
+.bird {
+  position: absolute;
+  background-image: url("../images/yellowbird-upflap.png");
+  background-repeat: no-repeat;
+  width: 33px;
+  height: 28px;
+  left: 100px;
+}
+
+.pipe {
+  transition: left 0.05s linear;
+  position: absolute;
+  width: 52px;
+  background-image: url("../images/pipe-green.png");
+  background-size: cover;
+  
+}
+
+.top-pipe {
+  top: 0;
+  transform: scaleY(-1); /* flip the pipe */
+}
+
+.bottom-pipe {
+  bottom: 90px;
+}
+
+.base {
+  position: absolute;
+  bottom: 0;
+  width: 200%; /* Twice the width to prevent gaps */
+  height: 90px;
+  background-image: url("../images/base.png");
+  background-repeat: repeat-x;
+  animation: moveBase 3s linear infinite;
+  will-change: transform;
+}
+
+.startboard {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.75);
+  padding: 20px 40px;
+  border-radius: 15px;
+  color: #fff;
+  font-size: 1.5rem;
+  z-index: 1000;
+}
+
+.highlight {
+  color: #f3ec78;
+  font-weight: bold;
+}
+
+.score {
+  position: absolute;
+  top: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 5px 10px;
+
+  font-size: 25px; /* 20px */
+  font-weight: bold;
+  color: #fff;
+  
+
+  z-index: 10;
+  pointer-events: none; /* prevents accidental click interference */
+}
+
+@keyframes moveBackground {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -400px 0; /* Match base movement */
+  }
+}
+
+@keyframes moveBase {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%); /* Make sure base moves exactly as needed */
+  }
+}
+
+.sound-toggle {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  padding: 5px 12px;
+  font-size: 14px;
+  background: #222;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.sound-toggle:hovers {
+  background: #444;
+}
+.bird-selector {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 20;
+}
+
+.bird-selector button {
+  margin: 0 5px;
+  font-size: 20px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+}
+/* Enhanced Game Modal */
+#gameMenuModal {
+  font-family: 'Press Start 2P', cursive;
+  background: linear-gradient(180deg, #fceabb 0%, #f8b500 100%);
+  border: 5px solid #ff9800;
+  padding: 30px 25px;
+  border-radius: 20px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.4);
+  z-index: 999;
+}
+
+#gameMenuModal h2 {
+  font-size: 16px;
+  color: #212121;
+  text-shadow: 2px 2px #fff59d;
+  margin-bottom: 25px;
+}
+
+#gameMenuModal .select-box,
+#gameMenuModal .toggle-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 15px 0;
+}
+
+#gameMenuModal select,
+#gameMenuModal button {
+  font-family: 'Press Start 2P', cursive;
+  padding: 10px 15px;
+  font-size: 12px;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 3px 4px 0px #b26500;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+#gameMenuModal select {
+  background: #ffca28;
+  color: #000;
+}
+
+#gameMenuModal select:hover {
+  background-color: #ffc107;
+}
+
+#soundToggle {
+  background-color: #ff7043;
+  color: white;
+}
+
+#soundToggle:hover {
+  background-color: #f4511e;
+}
+
+#startGameBtn {
+  margin-top: 20px;
+  background-color: #66bb6a;
+  color: white;
+  font-size: 14px;
+  padding: 12px 20px;
+  box-shadow: 3px 4px 0px #388e3c;
+}
+
+#startGameBtn:hover {
+  background-color: #43a047;
+}
+ 

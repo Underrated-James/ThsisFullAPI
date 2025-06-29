@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 /* Ensure the background image covers the entire page */
 .settings-page {
     position: relative;
@@ -27,10 +29,11 @@
     width: 90%;
     color: white;
     text-align: center;
+    font-family: 'Press Start 2P', cursive;
   }
   
   .settings-title {
-    font-size: 2rem;
+    font-size: var(--dynamic-font-size);
     margin-bottom: 1.5rem;
   }
   
@@ -54,7 +57,7 @@
     }
   
     .settings-title {
-      font-size: 1.5rem;
+      font-size: var(--dynamic-font-size);
     }
   }
   .voice-controller {

@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "types": ["jest", "node"],
+    "module": "ESNext",
+    "jsx": "react-jsx",
+    "outDir": "./node_modules/.tsbuild/test" // ✅ needed when emit is allowed
+  },
+  "include": [
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ]
+}

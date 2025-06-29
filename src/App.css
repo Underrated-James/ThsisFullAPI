@@ -4,16 +4,25 @@ body {
   padding: 0;
   overflow-x: hidden; /* Prevent horizontal scrolling */
   transition: filter 0.3s ease-in-out;
+  
+  /* ✅ Add dynamic font size support */
+  --dynamic-font-size: 16px;
+  font-size: var(--dynamic-font-size);
 }
 
 /* ✅ Force apply the filter */
-html.protanopia {
+svg#colorblind-filters {
+  display: none; /* Keeps the filters available without affecting performance */
+}
+
+html.protanopia-active {
   filter: url(#protanopia-enhanced) !important;
 }
 
-html.tritanopia {
+html.tritanopia-active {
   filter: url(#tritanopia-advanced) !important;
 }
+
 .voice-controller {
   position: fixed; /* Keeps mic on the screen while scrolling */
   bottom: 20px; /* Distance from the bottom */
@@ -33,4 +42,20 @@ html.tritanopia {
 
 .mic-button:hover {
   transform: scale(1.1); /* Zooms the mic on hover */
+}
+
+.main-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Ensure full viewport height */
+  width: 100%;
+}
+:root {
+  --dynamic-font-size: 16px; /* default fallback */
+}
+
+body {
+  font-size: var(--dynamic-font-size);
+  transition: font-size 0.3s ease;
 }
