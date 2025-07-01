@@ -473,20 +473,7 @@ const startGame = () => {
   }, [grid, currentPiece, nextPiece]);
 
 
-  const hardDrop = () => {
-  if (!currentPiece) return;
-
-  let dropY = currentPiece.y;
-  while (isValidMove(currentPiece.shape, currentPiece.x, dropY + 1)) {
-    dropY++;
-  }
-
-  const dropped = { ...currentPiece, y: dropY };
-  setCurrentPiece(dropped);
-  currentPieceRef.current = dropped;
-
-  lockPiece(); // Place it immediately
-};
+  
 
 useEffect(() => {
   if (gameStarted && !gameOver && !showMenu) {
@@ -523,8 +510,11 @@ return (
   <div className="game-container" style={{ position: 'relative' }}>
     {/* 🎙️ Tetris Voice Commands */}
     <TetrisVoiceHandler
-      setShowGhost={setShowGhost}
-      setBlockStyle={setBlockStyle}
+      showGhost={showGhost}
+  setShowGhost={setShowGhost}
+  blockStyle={blockStyle}
+  setBlockStyle={setBlockStyle}
+      
     />
 
     {/* 📋 Game Menu Modal */}

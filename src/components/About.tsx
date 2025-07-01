@@ -18,7 +18,8 @@ const FontSized = ({ children, fontSize }: { children: React.ReactNode; fontSize
 
 function About() {
   const [selected, setSelected] = useState("How to use Daltonization Filter");
-  const fontSize = useFontSize();
+  const { fontSize } = useFontSize();
+
 
   const renderContent = () => {
     switch (selected) {

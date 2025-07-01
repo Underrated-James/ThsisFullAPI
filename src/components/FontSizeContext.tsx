@@ -1,16 +1,23 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import  {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useMemo,
+  ReactNode,
+} from "react";
 
-// Define the context type
+// Define the context value shape
 type FontSizeContextType = {
   fontSize: number;
   setFontSize: (size: number) => void;
 };
 
-// Create the context with an initial undefined value
+// Create the context
 const FontSizeContext = createContext<FontSizeContextType | undefined>(undefined);
 
-// Custom hook for using font size context
-export const useFontSize = () => {
+// Custom hook to use font size context
+export const useFontSize = (): FontSizeContextType => {
   const context = useContext(FontSizeContext);
   if (!context) {
     throw new Error("useFontSize must be used within a FontSizeProvider");
@@ -18,27 +25,29 @@ export const useFontSize = () => {
   return context;
 };
 
-// FontSizeProvider implementation
-export const FontSizeProvider = ({ children }: { children: React.ReactNode }) => {
+// Provider component
+export const FontSizeProvider = ({ children }: { children: ReactNode }) => {
   const [fontSize, setFontSize] = useState<number>(() => {
-    return Number(localStorage.getItem("textSize")) || 16;
+    const saved = localStorage.getItem("textSize");
+    return saved ? Number(saved) : 16;
   });
 
-  // Update both state and localStorage
-  const updateFontSize = (size: number) => {
-    localStorage.setItem("textSize", size.toString());
-    setFontSize(size);
-  };
-
+  // Update localStorage whenever font size changes
   useEffect(() => {
-    const storedSize = Number(localStorage.getItem("textSize")) || 16;
-    if (storedSize !== fontSize) {
-      setFontSize(storedSize);
-    }
-  }, []);
+    localStorage.setItem("textSize", fontSize.toString());
+  }, [fontSize]);
+
+  // Memoize context value to avoid unnecessary re-renders
+  const contextValue = useMemo(
+    () => ({
+      fontSize,
+      setFontSize,
+    }),
+    [fontSize]
+  );
 
   return (
-    <FontSizeContext.Provider value={{ fontSize, setFontSize: updateFontSize }}>
+    <FontSizeContext.Provider value={contextValue}>
       {children}
     </FontSizeContext.Provider>
   );

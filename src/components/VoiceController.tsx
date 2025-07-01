@@ -1,6 +1,6 @@
 // components/VoiceController.tsx
 import { Mic, MicOff } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useSpeechRecognition from "../Hooks/userSpeechRecognitionHook";
 import { useColorBlind } from "../DaltonizationFilter/ColorBlindContext";
 import { useNavigate } from "react-router-dom";
@@ -16,12 +16,10 @@ const VoiceController: React.FC = () => {
 
   const { setFilterMode } = useColorBlind();
   const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(false); // optional UI feature
 
   const dispatchCommand = (command: string) => {
     const cmd = command.toLowerCase();
 
-    // Navigation commands
     const routes: Record<string, string | number> = {
       "go to home": "/",
       "go to settings": "/settings",
@@ -40,7 +38,6 @@ const VoiceController: React.FC = () => {
       }
     }
 
-    // Color filter commands
     if (cmd.includes("protanopia")) {
       setFilterMode("protanopia");
       console.log("🎨 Protanopia mode enabled.");
@@ -51,7 +48,9 @@ const VoiceController: React.FC = () => {
       setFilterMode("none");
       document.documentElement.style.filter = "none";
       document.getElementById("protanopia-filter")?.remove();
-      ["daltonization", "protanopiaFilter"].forEach((item) => localStorage.removeItem(item));
+      ["daltonization", "protanopiaFilter"].forEach((item) =>
+        localStorage.removeItem(item)
+      );
       window.dispatchEvent(new Event("storage"));
       console.log("🎨 Color filter disabled.");
       return;
@@ -60,7 +59,11 @@ const VoiceController: React.FC = () => {
     console.log("🤖 Voice command not recognized:", cmd);
   };
 
-  
+  useEffect(() => {
+    if (text.trim() !== "") {
+      dispatchCommand(text);
+    }
+  }, [text]);
 
   if (!hasRecognitionSupport) {
     return <h1>⚠️ Your browser does not support speech recognition.</h1>;
