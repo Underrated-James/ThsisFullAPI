@@ -1,7 +1,8 @@
 import { Direction } from '../types/Direction';
 import { Animation, AnimationType } from '../types/Animation';
 
-export type BoardType = number[];
+export type BoardType = Array<number>;
+
 
 export function newTileValue() {
   return Math.random() > 0.1 ? 2 : 4;
@@ -10,6 +11,11 @@ export function newTileValue() {
 function containsEmpty(board: BoardType): boolean {
   return board.find(value => value === 0) === 0;
 }
+
+function safeGet(board: BoardType, index: number): number {
+  return board[index] ?? 0;
+}
+
 
 interface NewTileResult {
   board: BoardType;
@@ -104,13 +110,12 @@ function rotateBoard(
   direction: Direction,
   undo = false
 ): BoardType {
-  // No need to rotate, it's already in the correct orientation.
   if (direction === Direction.DOWN) {
-    return [...board];
+    return board.map(value => value ?? 0); // ✅ ensures all entries are defined
   }
 
   const boardSize = Math.sqrt(board.length);
-  const newBoard = new Array(board.length);
+  const newBoard = new Array(board.length).fill(0); // ✅ Fill with 0s
 
   if (undo) {
     switch (direction) {
@@ -130,6 +135,8 @@ function rotateBoard(
 
   return newBoard;
 }
+
+
 
 function rotateAnimations(
   board: BoardType,
@@ -174,34 +181,30 @@ export function updateBoard(
   let lastMergedIndex: number | undefined = undefined;
 
   for (let col = 0; col < boardSize; col++) {
-    // Going from second last to the first row on the rotated board.
     for (let row = boardSize - 2; row >= 0; row--) {
       const initialIndex = row * boardSize + col;
-      if (board[initialIndex] === 0) {
-        continue;
-      }
+      if (board[initialIndex] === 0) continue;
 
       let i = initialIndex;
       let below = i + boardSize;
       let merged = false;
       let finalIndex: number | undefined = undefined;
 
-      while (board[below] === 0 || (!merged && board[i] === board[below])) {
-        if (below === lastMergedIndex) {
-          break;
-        }
+      while (
+        below < board.length &&
+        (safeGet(board, below) === 0 || (!merged && board[i] === safeGet(board, below)))
+      ) {
+        if (below === lastMergedIndex) break;
 
         changed = true;
 
-        if (board[below] !== 0) {
-          // Ensure non-greedy behavior, only allow first merge after fall.
-          merged = true;
+        if (safeGet(board, below) !== 0) {
+  merged = true;
+  scoreIncrease += safeGet(board, i) * 2;
+}
 
-          scoreIncrease += board[i] * 2;
-        }
+board[below] = safeGet(board, below) + safeGet(board, i);
 
-        // Merge or update tile.
-        board[below] += board[i];
         board[i] = 0;
         i = below;
         finalIndex = below;
@@ -218,7 +221,6 @@ export function updateBoard(
 
         if (merged) {
           lastMergedIndex = finalIndex;
-
           animations.push({
             type: AnimationType.MERGE,
             index: finalIndex,
@@ -247,6 +249,7 @@ export function updateBoard(
 
   return { board, scoreIncrease, animations };
 }
+
 
 export function movePossible(board: BoardType): boolean {
   const boardSize = Math.sqrt(board.length);
