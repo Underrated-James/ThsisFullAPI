@@ -10,9 +10,14 @@ export type Piece = {
 
 export const randomPiece = (): Piece => {
   const index = Math.floor(Math.random() * shapes.length);
-  const selected = shapes[index]!;
-  const shapeCopy = selected.shape.map(row => [...row]);
-  const x = Math.floor(COLS / 2) - Math.ceil(shapeCopy[0].length / 2);
+  const selected = shapes[index];
+
+  if (!selected || !selected.shape || !selected.class) {
+    throw new Error('Invalid shape data');
+  }
+
+  const shapeCopy = selected.shape.map((row: number[]) => [...row]);
+  const x = Math.floor(COLS / 2) - Math.ceil(shapeCopy[0]?.length ?? 0 / 2);
 
   return {
     shape: shapeCopy,

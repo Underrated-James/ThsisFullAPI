@@ -6,7 +6,7 @@ interface Props {
   onRestart: () => void;
 }
 
-const GameOverOverlay: React.FC<Props> = ({ onRestart }) => {
+const GameOverOverlay: React.FC<Props> = () => {
   return (
     <div className="game-over-overlay">
       <div className="game-over-content">
