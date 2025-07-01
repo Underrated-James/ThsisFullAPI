@@ -7,9 +7,9 @@ import playButtonImage from "../Images/play-button.jpg";
 import img2048 from "../Images/2048-games.png";
 import imgFlappy from "../Images/FlappyBird.png";
 import imgScream from "../Images/tetris.jpg";
-import video2048 from "../videos/2048video.mp4";
-import videoFlappy from "../videos/flappybird video.mp4";
-import videoTetris from "../videos/tetrix-video.mp4";
+import video2048 from "../videos/2048vid.mp4";
+import videoFlappy from "../videos/flappyvid.mp4";
+import videoTetris from "../videos/tetrisvid.mp4";
 import { useFontSize } from "./FontSizeContext";
 
 // Game Data
